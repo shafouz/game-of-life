@@ -1,3 +1,6 @@
+require "./neighbor"
+require "./cell"
+
 class Universe
   # 0 -> 29 | X
   # 0 -> 167 | Y
@@ -24,11 +27,32 @@ class Universe
   def rows
     @rows = 30
   end
-  
+
   def generation_check
-    @alive_cells.each do |cell|
-      cell.neighboor_check
+  end
+
+  def check_neighbors(cell)
+    neighbors = find_neighbors(cell)
+    neighbors.each do |neighbor|
+      if neighbor.alive?
+        cell.add_dead_neighbors
+      else
+        cell.add_dead_neighbors
+      end
     end
-    # loop through all alive cells and neighboor cells
+  end
+
+  def find_neighbors(cell)
+    neighbors = []
+    ((cell.y-1)..(cell.y+1)).each_with_index do |y, y_index|
+      ((cell.x-1)..(cell.x+1)).each_with_index do |x, x_index|
+        unless y_index == 1 && x_index == 1
+          neighbors << universe[x][y]
+        end
+      end
+    end
+    neighbors
   end
 end
+
+puts Universe.new.find_neighbors(Cell.new(position: {x: 10, y: 123}))

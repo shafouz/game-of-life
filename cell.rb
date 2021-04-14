@@ -1,10 +1,10 @@
-require_relative "universe"
 
-class Cell < Universe
+class Cell
   def initialize(position: , status: "dead")
     @position = position
     @status = status
     @alive_neighbors = 0
+    @dead_neighbors = 0
   end
 
   def position
@@ -39,37 +39,38 @@ class Cell < Universe
     @status == "dead"
   end
 
-  def neighboor_check
-    ((y-1)..(y+1)).each_with_index do |y, y_index|
-      ((x-1)..(x+1)).each_with_index do |x, x_index|
-        unless x_index == 1 && y_index == 1
-          puts universe[x][y].status
-        end
-      end
-    end
-  end
-
   def alive_neighbors
     @alive_neighbors
   end
 
-  def add_neighbor
+  def dead_neighbors
+    @dead_neighbors
+  end
+
+  def add_dead_neighbors
+    @dead_neighbors += 1
+  end
+
+  def add_alive_neighbor
     @alive_neighbors += 1
   end
 
+  def rules(cell)
+    if rule_one
+      cell
+    else if rule_two
+      cell.alive
+    else
+      cell.dead
+    end
+  end
+
   def rule_one(cell)
-    cell if cell.alive? && (cell.neighbors == 2 || cell.neighbors == 3)
+    cell.alive? && (cell.neighbors == 2 || cell.neighbors == 3)
   end
 
   def rule_two(cell)
-    cell.alive if cell.dead? && cell.neighbors == 3
+    cell.dead? && cell.neighbors == 3
   end
-
-  def rule_three(cell)
-    cell.dead
-  end
-
 end
 
-o = Universe.new
-o.generation_check
