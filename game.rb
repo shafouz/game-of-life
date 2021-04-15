@@ -1,32 +1,11 @@
 require "io/console"
-require_relative "cell"
-require_relative "universe"
+require "./universe.rb"
+require "./cell.rb"
+require "./neighbor.rb"
+require "./displayer.rb"
 
-class Game
-end
-
-module Displayer
-  def self.display(array)
-    while true
-      sleep 1
-      puts `clear`
-      generation = 1
-
-      array.each do |array2|
-        array2.each do |cell|
-          if cell.alive?
-            print "o"
-          else
-            print "."
-          end
-        end
-        puts ""
-      end
-
-      160.times { print " " }
-      print generation
-    end
+module Game
+  def self.run
   end
 end
 
-Displayer.display(Universe.new.universe)
