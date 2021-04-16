@@ -1,20 +1,19 @@
-# Universe starts with a pattern
-# Universe goes through every instance of Cell
-# Universe asks Neighbor how many alive/dead neighbors a cell has
-# Universe applies its rules
-# Universe creates/destroy based on the rules
+require "./universe"
 
-class Neighbor
-  attr_reader :cell, :universe, :neighbors
+class Cell
+  attr_reader :position, :status, :universe, :neighbors
 
-  def initialize(cell:, universe:)
-    @cell = cell
+  def initialize(position: , status: "dead", universe:)
+    @position = position
+    @status = status
     @universe = universe
     @neighbors = { alive: 0, dead: 0, all: Array.new }
+    universe.add_cell(self)
   end
 
-  def check_cell
+  def prepare_neighbors
     find_neighbors
+    #check_neighbors
   end
 
   def alive_neighbors
@@ -43,14 +42,6 @@ class Neighbor
     end
   end
 
-  def find_neighbors
-    loop_through_neighbors do |x,y|
-      if universe.cell_exists?(x: x, y: y)
-        @neighbors[:all] << universe[[x,y]]
-      end
-    end
-  end
-
   def loop_through_neighbors
     ((y-1)..(y+1)).each_with_index do |y, y_index|
       ((x-1)..(x+1)).each_with_index do |x, x_index|
@@ -61,4 +52,37 @@ class Neighbor
     end
   end
 
+  def find_neighbors
+    loop_through_neighbors do |x,y|
+      if universe.cell_exists?(x: x, y: y)
+        @neighbors[:alive] += 1
+      else
+        @neighbors[:dead] += 1
+      end
+    end
+  end
+
+  def y
+    @position[:y]
+  end
+
+  def x
+    @position[:x]
+  end
+
+  def alive
+    @status = "alive"
+  end
+
+  def dead
+    @status = "dead"
+  end
+
+  def alive?
+    @status == "alive"
+  end
+
+  def dead?
+    @status == "dead"
+  end
 end

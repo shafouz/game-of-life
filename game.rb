@@ -1,7 +1,6 @@
 require "io/console"
 require "./universe.rb"
 require "./cell.rb"
-require "./neighbor.rb"
 require "./displayer.rb"
 
 module Game
@@ -9,3 +8,7 @@ module Game
   end
 end
 
+uni = Universe.new
+cell = Cell.new(status: "alive", position: {x:3,y:1}, universe: uni)
+#puts uni.cells
+uni.generate
