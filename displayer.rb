@@ -1,31 +1,50 @@
-module Displayer
-  def self.display(hash)
-    while true
-      sleep 1
-      puts `clear`
-      generation = 1
-      50.times { print " " }
+class Displayer
+  attr_reader :x_offset, :y_offset, :generation
 
-      print_hash(hash)
+  def initialize
+    @generation = 1
+    @x_offset = 84
+    @y_offset = 18
+  end
 
-      print_footer(generation)
-    end
+  def display(hash)
+    hash = set_offset(hash)
+    print_hash(hash)
+    print_footer
+    reset_terminal
   end
 
   private
-  def self.print_hash(hash)
-    hash.each_value do |value|
-      if value.alive?
-        print "o"
-      else
-        print "."
+  def print_hash(hash)
+    (1..40).each do |y|
+      (1..168).each do |x|
+        if hash.key?([x,y])
+          print "x"
+          #print "|#{x - 84},#{y - 18}|"
+        else
+          print "."
+        end
       end
+      puts
     end
   end
 
-  def self.print_footer(generation)
-    160.times { print " " }
-    print generation
+  def print_footer
+    gen = "generation: #{generation}"
+    (168 - gen.length).times { print " " }
+    print gen
+    @generation += 1
+  end
+
+  def set_offset(hash)
+    offset_hash = Hash.new
+    hash.map { |key, value| offset_hash[[key[0] + x_offset, key[1] + y_offset]] = 0 }
+    offset_hash
+  end
+
+  def reset_terminal
+    sleep 0.25
+    puts `clear`
   end
 end
 

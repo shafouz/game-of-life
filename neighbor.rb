@@ -9,21 +9,14 @@ class Neighbor
 
   def add_neighbors
     loop_through_neighbors do |x, y|
-      universe.add_reference(x, y)
+      universe.neighbor_references[[x,y]] = 0
     end
   end
 
-  def remove_neighbors
+  def add_alive_neighbors
     loop_through_neighbors do |x, y|
-      universe.remove_reference(x, y)
-    end
-  end
-
-  def live_neighbors
-    initial_pos = [x, y]
-    loop_through_neighbors do |x,y|
-      if universe.cells[[x,y]]
-        universe.add_reference(initial_pos[0], initial_pos[1])
+      if universe.cells[[x,y]].instance_of? Cell
+        universe.add_reference(@x, @y)
       end
     end
   end

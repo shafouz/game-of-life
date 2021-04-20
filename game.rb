@@ -1,19 +1,19 @@
-require "io/console"
 require "./universe.rb"
 require "./cell.rb"
 require "./neighbor.rb"
 require "./displayer.rb"
+require "pry"
 
 module Game
   def self.run
     uni = Universe.new
-    cell = Cell.new(position: {x: 1, y: 1}, universe: uni, status: "alive")
-    cell2 = Cell.new(position: {x: 1, y: 2}, universe: uni, status: "alive")
-    cell3 = Cell.new(position: {x: 1, y: 3}, universe: uni, status: "alive")
-    uni.generate
-    uni.p_cells
-    print uni.neighbor_references
+    display = Displayer.new
+    while true
+      uni.generate
+      display.display(uni.cells)
+    end
   end
 end
 
 Game.run
+
